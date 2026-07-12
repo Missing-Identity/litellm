@@ -12,7 +12,7 @@ from typing import (
     Union,
 )
 
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel, ConfigDict, Field
 from typing_extensions import Literal, Required, TypedDict
 
 if TYPE_CHECKING:
@@ -203,12 +203,12 @@ class CompletionRequest(BaseModel):
     deployment_id: Optional[str] = None
     functions: Optional[List[str]] = None
     function_call: Optional[str] = None
-    base_url: Optional[str] = None
+    base_url: Optional[str] = Field(default=None, alias="api_base")
     api_version: Optional[str] = None
     api_key: Optional[str] = None
     model_list: Optional[List[str]] = None
 
-    model_config = ConfigDict(protected_namespaces=(), extra="allow")
+    model_config = ConfigDict(protected_namespaces=(), extra="allow", populate_by_name=True)
 
 
 @dataclass(frozen=True, slots=True)
