@@ -1,13 +1,13 @@
 from typing import List, Optional, Union
 
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel, ConfigDict, Field
 
 
 class EmbeddingRequest(BaseModel):
     model: str
     input: List[str] = []
     timeout: int = 600
-    api_base: Optional[str] = None
+    api_base: Optional[str] = Field(default=None, alias="base_url")
     api_version: Optional[str] = None
     api_key: Optional[str] = None
     api_type: Optional[str] = None
@@ -18,4 +18,4 @@ class EmbeddingRequest(BaseModel):
     litellm_logging_obj: Optional[dict] = None
     logger_fn: Optional[str] = None
 
-    model_config = ConfigDict(extra="allow")
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
