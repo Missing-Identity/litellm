@@ -173,7 +173,7 @@ class ModelInfo(BaseModel):
 
 class CredentialLiteLLMParams(BaseModel):
     api_key: Optional[str] = None
-    api_base: Optional[str] = None
+    api_base: Optional[str] = Field(default=None, alias="base_url")
     api_version: Optional[str] = None
     ## AZURE OAUTH ##
     # Without this field, ``get_deployment_credentials_with_provider``
@@ -201,6 +201,8 @@ class CredentialLiteLLMParams(BaseModel):
     s3_bucket_name: Optional[str] = None
     ## IBM WATSONX ##
     watsonx_region_name: Optional[str] = None
+
+    model_config = ConfigDict(protected_namespaces=(), populate_by_name=True)
 
 
 _RESERVED_INIT_KEYS = frozenset({"self", "params", "__class__"})
@@ -243,7 +245,7 @@ class GenericLiteLLMParams(CredentialLiteLLMParams, CustomPricingLiteLLMParams):
         default=False,
         description="Use stored xAI OAuth credentials when no xAI API key is configured.",
     )
-    model_config = ConfigDict(extra="allow", arbitrary_types_allowed=True)
+    model_config = ConfigDict(extra="allow", arbitrary_types_allowed=True, populate_by_name=True)
     merge_reasoning_content_in_choices: Optional[bool] = False
     model_info: Optional[Dict] = None
     mock_response: Optional[Union[str, ModelResponse, Exception, Any]] = None
@@ -320,7 +322,7 @@ class LiteLLM_Params(GenericLiteLLMParams):
     """
 
     model: str
-    model_config = ConfigDict(extra="allow", arbitrary_types_allowed=True)
+    model_config = ConfigDict(extra="allow", arbitrary_types_allowed=True, populate_by_name=True)
 
     def __contains__(self, key):
         # Define custom behavior for the 'in' operator
